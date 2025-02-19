@@ -12,7 +12,7 @@ spec:
     helm:
       releaseName: alloy
       values: |
-        {{ .Files.Get "templates/alloy/_values.yaml" | nindent 8 }}
+        {{ $.Files.Get "templates/alloy/_values.yaml" | nindent 8 }}
   destination:
     server: "{{ .Values.spec.destination.server }}"
     namespace: alloy

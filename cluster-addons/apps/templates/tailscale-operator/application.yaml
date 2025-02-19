@@ -12,7 +12,7 @@ spec:
     helm:
       releaseName: tailscale-operator
       values: |
-        {{ .Files.Get "templates/tailscale-operator/_values.yaml" | nindent 8 }}
+        {{ $.Files.Get "templates/tailscale-operator/_values.yaml" | nindent 8 }}
   destination:
     server: "{{ .Values.spec.destination.server }}"
     namespace: tailscale
