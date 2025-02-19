@@ -1,0 +1,9 @@
+operatorConfig:
+  defaultTags: "tag:hwkn-prod-k8s-operator"
+  hostname: "hwkn-prod-tailscale-operator"
+
+proxyConfig:
+  defaultTags: "tag:hwkn-prod-k8s"
+
+apiServerProxyConfig:
+  mode: "true"
