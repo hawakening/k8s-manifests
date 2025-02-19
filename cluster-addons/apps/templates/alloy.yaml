@@ -17,6 +17,9 @@ spec:
     server: "{{ .Values.spec.destination.server }}"
     namespace: alloy
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
