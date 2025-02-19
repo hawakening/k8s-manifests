@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    chart: grafana/alloy
+    chart: alloy
     repoURL: https://grafana.github.io/helm-charts
     targetRevision: 0.9.2
     helm:
