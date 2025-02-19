@@ -11,10 +11,10 @@ spec:
     targetRevision: 0.9.2
     helm:
       releaseName: alloy
-      valueFiles: |
+      values: |
         {{ .Files.Get "values/alloy.values.yaml" | nindent 8 }}
   destination:
-    server: { { Values.spec.destination.server } }
+    server: "{{ Values.spec.destination.server }}"
     namespace: alloy
   syncPolicy:
     syncOptions:
