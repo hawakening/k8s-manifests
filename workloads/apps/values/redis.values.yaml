@@ -2,7 +2,6 @@ architecture: replication
 auth:
   enabled: false
 master:
-  # resourcesPreset: medium
   resources:
     requests:
       cpu: 500m
