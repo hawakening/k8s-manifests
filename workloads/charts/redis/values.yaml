@@ -1,0 +1,31 @@
+architecture: replication
+auth:
+  enabled: false
+master:
+  # resourcesPreset: medium
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+      ephemeral-storage: 50Mi
+    limits:
+      cpu: 750m
+      memory: 1536Mi
+      ephemeral-storage: 2Gi
+  persistence:
+    enabled: false
+replica:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+      ephemeral-storage: 50Mi
+    limits:
+      cpu: 750m
+      memory: 1536Mi
+      ephemeral-storage: 2Gi
+  persistence:
+    enabled: false
+sentinel:
+  enabled: true

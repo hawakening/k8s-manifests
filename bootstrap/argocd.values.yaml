@@ -1,0 +1,9 @@
+configs:
+  params:
+    server.insecure: true
+
+# TODO: Waiting until we know what ingress controller we'll be using
+server:
+  ingress:
+    enabled: false
+# TODO: Setup Github OAuth to login

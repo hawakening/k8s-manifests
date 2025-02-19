@@ -1,0 +1,4 @@
+apiVersion: v2
+description: App of Apps
+name: workloads
+version: 0.1.0

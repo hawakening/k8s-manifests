@@ -1,0 +1,4 @@
+apiVersion: v2
+description: App of Apps
+name: cluster-addons
+version: 0.1.0

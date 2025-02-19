@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: grafana/alloy
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 0.9.2
+    helm:
+      releaseName: alloy
+      valueFiles: |
+        {{ .Files.Get "values/alloy.values.yaml" | nindent 8 }}
+  destination:
+    server: { { Values.spec.destination.server } }
+    namespace: alloy
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
