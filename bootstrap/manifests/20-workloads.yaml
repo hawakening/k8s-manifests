@@ -14,3 +14,10 @@ spec:
     path: workloads/apps
     repoURL: https://github.com/hawakening/k8s-manifests
     targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
