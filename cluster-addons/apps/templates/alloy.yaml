@@ -14,7 +14,7 @@ spec:
       values: |
         {{ .Files.Get "values/alloy.values.yaml" | nindent 8 }}
   destination:
-    server: "{{ Values.spec.destination.server }}"
+    server: {{ .Values.spec.destination.server }}
     namespace: alloy
   syncPolicy:
     syncOptions:
