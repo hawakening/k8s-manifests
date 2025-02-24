@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: metabase
+  name: hawakening
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: metabase
+    namespace: hawakening
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: workloads/manifests/metabase
+    path: workloads/manifests/hawakening
     repoURL: https://github.com/hawakening/k8s-manifests
     targetRevision: HEAD
   syncPolicy:

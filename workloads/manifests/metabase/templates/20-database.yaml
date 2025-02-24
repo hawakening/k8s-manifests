@@ -1,0 +1,37 @@
+---
+# postgres-cluster.yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+  namespace: metabase
+spec:
+  instances: 1
+
+  # PostgreSQL configuration
+  postgresql:
+    parameters:
+      shared_buffers: "256MB"
+      max_connections: "100"
+
+  # Resource requirements
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "0.5"
+    limits:
+      memory: "1Gi"
+      cpu: "1"
+
+  # Primary storage configuration
+  storage:
+    size: 2Gi
+    storageClass: longhorn # adjust according to your cluster
+
+  # Database configuration
+  bootstrap:
+    initdb:
+      database: metabaseappdb
+      owner: metabase
+      secret:
+        name: postgres-secret

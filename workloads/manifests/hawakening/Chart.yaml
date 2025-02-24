@@ -1,0 +1,4 @@
+apiVersion: v2
+description: Hawakening Services Stack
+name: hawakening
+version: 0.1.0

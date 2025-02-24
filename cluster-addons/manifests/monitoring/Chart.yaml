@@ -1,0 +1,4 @@
+apiVersion: v2
+description: monitoring stack
+name: monitoring
+version: 0.1.0

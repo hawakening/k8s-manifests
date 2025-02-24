@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: metabase
+  name: cloudflared
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: metabase
+    namespace: cloudflared
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: workloads/manifests/metabase
+    path: cluster-addons/manifests/cloudflared
     repoURL: https://github.com/hawakening/k8s-manifests
     targetRevision: HEAD
   syncPolicy:

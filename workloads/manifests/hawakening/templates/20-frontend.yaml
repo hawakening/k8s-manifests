@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hawakening-frontend
+  namespace: hawakening
+  labels:
+    app: hawakening-frontend
+spec:
+  replicas: 3 # Number of replicas
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: hawakening-frontend
+  template:
+    metadata:
+      labels:
+        app: hawakening-frontend
+    spec:
+      containers:
+        - name: hawakening-frontend
+          image: ghcr.io/hawakening/hawakening-services-frontend:v0.27.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+      imagePullSecrets:
+        - name: ghcr-secret
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: hawakening-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hawakening-frontend
+  namespace: hawakening
+  labels:
+    app: hawakening-frontend
+spec:
+  selector:
+    app: hawakening-frontend
+  ports:
+    - protocol: TCP
+      port: 30001
+      targetPort: 80
+      # nodePort: 30001 # Specify a node port if you want a specific port, otherwise it will be auto-assigned
+  type: LoadBalancer

@@ -1,0 +1,4 @@
+apiVersion: v2
+description: cloudflared daemon
+name: cloudflared
+version: 0.1.0
