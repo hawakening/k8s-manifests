@@ -29,7 +29,7 @@ spec:
               app: hawakening-backend
       containers:
         - name: hawakening-backend
-          image: ghcr.io/hawakening/hawakening-services-backend:v0.49.0
+          image: ghcr.io/hawakening/hawakening-services-backend:v0.50.0
           ports:
             - containerPort: 4000
           resources:
@@ -37,7 +37,7 @@ spec:
               memory: "256Mi"
               cpu: "500m"
             limits:
-              memory: "512Mi"
+              memory: "1024Mi"
               cpu: "1000m"
           env:
             - name: MONGO_URL
