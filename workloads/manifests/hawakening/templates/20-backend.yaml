@@ -29,7 +29,7 @@ spec:
               app: hawakening-backend
       containers:
         - name: hawakening-backend
-          image: ghcr.io/hawakening/hawakening-services-backend:v0.50.1
+          image: ghcr.io/hawakening/hawakening-services-backend:v0.50.2
           ports:
             - containerPort: 4000
           resources:
@@ -91,7 +91,7 @@ spec:
                   name: backend-secret
                   key: MAIL_PASS
             - name: LOG_LEVEL
-              value: info
+              value: http
             # - name: DISABLE_REGISTRATION
             #   value: "true"
             - name: REDIS_SENTINEL_HOST
