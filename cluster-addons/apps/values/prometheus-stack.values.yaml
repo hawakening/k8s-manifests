@@ -37,9 +37,6 @@ prometheus:
       tailscale.com/expose: "true"
   prometheusSpec:
     enableRemoteWriteReceiver: true
-    serviceMonitorNamespaceSelector:
-      matchLabels:
-        prometheus: hawakening
     storageSpec:
       volumeClaimTemplate:
         spec:
