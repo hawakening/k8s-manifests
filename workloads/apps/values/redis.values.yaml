@@ -28,3 +28,7 @@ replica:
     enabled: false
 sentinel:
   enabled: true
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true

@@ -1,18 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: alloy
+  name: prometheus-stack
   namespace: argocd
 spec:
   project: default
   source:
-    chart: alloy
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 0.12.1
+    chart: kube-prometheus-stack
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 69.7.2
     helm:
-      releaseName: alloy
+      releaseName: kube-prometheus-stack
       values: |
-        {{ .Files.Get "values/alloy.values.yaml" | nindent 8 }}
+        {{ .Files.Get "values/prometheus-stack.values.yaml" | nindent 8 }}
   destination:
     server: "{{ .Values.spec.destination.server }}"
     namespace: monitoring

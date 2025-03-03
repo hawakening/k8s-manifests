@@ -1,0 +1,44 @@
+grafana:
+  ingress:
+    enabled: false
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: "longhorn"
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+  ## Configure additional grafana datasources (passed through tpl)
+  ## ref: http://docs.grafana.org/administration/provisioning/#datasources
+  plugins:
+    - grafana-mongodb-datasource
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      url: http://loki-gateway.monitoring.svc.cluster.local
+      access: proxy
+    # - name: MongoDB
+    #   type: grafana-mongodb-datasource
+    #   access: proxy
+    #   url: mongodb://mongodb-service:27017
+    #   jsonData:
+    #     connection_string: mongodb://mongodb-service:27017
+    #     database_name: hawakening
+    #   secureJsonData:
+    #     password: your_password
+prometheus:
+  service:
+    annotations:
+      tailscale.com/expose: "true"
+  prometheusSpec:
+    enableRemoteWriteReceiver: true
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
