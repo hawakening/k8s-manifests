@@ -1,4 +1,7 @@
 grafana:
+  grafana.ini:
+    server:
+      root_url: https://grafana.hwkn.dev
   ingress:
     enabled: false
   persistence:
