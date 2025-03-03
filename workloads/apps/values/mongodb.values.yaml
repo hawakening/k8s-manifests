@@ -16,6 +16,9 @@ metrics:
   enabled: true
   serviceMonitor:
     enabled: true
+    namespace: monitoring
+    labels:
+      release: kube-prometheus-stack
 # TODO: Create SealedSecret
 auth:
   ## @param auth.existingSecret Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, `mongodb-replica-set-key`)

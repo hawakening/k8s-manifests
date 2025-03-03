@@ -32,3 +32,6 @@ metrics:
   enabled: true
   serviceMonitor:
     enabled: true
+    namespace: monitoring
+    labels:
+      release: kube-prometheus-stack
