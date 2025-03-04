@@ -32,11 +32,7 @@ grafana:
     #   secureJsonData:
     #     password: your_password
 prometheus:
-  service:
-    annotations:
-      tailscale.com/expose: "true"
   prometheusSpec:
-    enableRemoteWriteReceiver: true
     storageSpec:
       volumeClaimTemplate:
         spec:
