@@ -17,6 +17,7 @@ metrics:
   collector:
     dbstats: true
     topmetrics: true
+  extraFlags: --collector.profile
   serviceMonitor:
     enabled: true
     namespace: monitoring
