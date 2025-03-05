@@ -14,4 +14,5 @@ data:
   MAIL_USER: "apikey"
   LOG_LEVEL: "info"
   MONGOOSE_DEBUG: "true"
+  SLOW_REQUEST_DEBUG: "true"
   # DISABLE_REGISTRATION: "true"
