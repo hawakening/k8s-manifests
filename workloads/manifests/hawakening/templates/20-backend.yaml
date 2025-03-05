@@ -29,7 +29,7 @@ spec:
               app: hawakening-backend
       containers:
         - name: hawakening-backend
-          image: ghcr.io/hawakening/hawakening-services-backend:v0.50.3
+          image: ghcr.io/hawakening/hawakening-services-backend:v0.51.0
           ports:
             - containerPort: 4000
           resources:
@@ -39,81 +39,11 @@ spec:
             limits:
               memory: "1024Mi"
               cpu: "1000m"
-          env:
-            - name: MONGO_URL
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: MONGO_URL
-            - name: GOOGLE_RECAPTCHA_V2_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: GOOGLE_RECAPTCHA_V2_SECRET_KEY
-            - name: ORCHESTRATOR_GHCR_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: ORCHESTRATOR_GHCR_USERNAME
-            - name: ORCHESTRATOR_GHCR_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: ORCHESTRATOR_GHCR_PASSWORD
-            - name: SITE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: SITE_URL
-            - name: METEOR_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: METEOR_URI
-            - name: MAIL_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: MAIL_HOST
-            - name: MAIL_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: MAIL_PORT
-            - name: MAIL_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: MAIL_USER
-            - name: MAIL_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: MAIL_PASS
-            - name: LOG_LEVEL
-              value: info
-            # - name: DISABLE_REGISTRATION
-            #   value: "true"
-            - name: REDIS_SENTINEL_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: REDIS_SENTINEL_HOST
-            - name: REDIS_SENTINEL_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: REDIS_SENTINEL_PORT
-            - name: REDIS_MASTER_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: REDIS_MASTER_NAME
-            - name: CLI_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: CLI_API_KEY
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secret
           livenessProbe:
             httpGet:
               path: /liveness

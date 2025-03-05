@@ -12,3 +12,6 @@ data:
   MAIL_HOST: "smtp.sendgrid.net"
   MAIL_PORT: "465"
   MAIL_USER: "apikey"
+  LOG_LEVEL: "info"
+  MONGOOSE_DEBUG: "true"
+  # DISABLE_REGISTRATION: "true"
