@@ -15,4 +15,3 @@ spec:
       targetPort: 4000
   type: ClusterIP
   internalTrafficPolicy: Cluster
-  externalTrafficPolicy: Cluster
