@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hawakening-backend
+  namespace: hawakening
+  labels:
+    app: hawakening-backend
+spec:
+  selector:
+    app: hawakening-backend
+  ports:
+    - protocol: TCP
+      port: 30002
+      targetPort: 4000
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  externalTrafficPolicy: Cluster

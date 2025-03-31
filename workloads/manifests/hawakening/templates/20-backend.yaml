@@ -29,7 +29,7 @@ spec:
               app: hawakening-backend
       containers:
         - name: hawakening-backend
-          image: ghcr.io/hawakening/hawakening-services-backend:v0.52.3
+          image: ghcr.io/hawakening/hawakening-services-backend:v0.52.4
           ports:
             - containerPort: 4000
           resources:
@@ -62,21 +62,3 @@ spec:
             failureThreshold: 3
       imagePullSecrets:
         - name: ghcr-secret
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hawakening-backend
-  namespace: hawakening
-  labels:
-    app: hawakening-backend
-spec:
-  selector:
-    app: hawakening-backend
-  ports:
-    - protocol: TCP
-      port: 30002
-      targetPort: 4000
-      # nodePort: 30002 # Specify a node port if you want a specific port, otherwise it will be auto-assigned
-  type: LoadBalancer

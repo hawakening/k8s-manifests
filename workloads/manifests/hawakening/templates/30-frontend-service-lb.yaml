@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hawakening-frontend
+  namespace: hawakening
+  labels:
+    app: hawakening-frontend
+spec:
+  selector:
+    app: hawakening-frontend
+  ports:
+    - protocol: TCP
+      port: 30001
+      targetPort: 80
+      # nodePort: 30001 # Specify a node port if you want a specific port, otherwise it will be auto-assigned
+  type: LoadBalancer
