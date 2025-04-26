@@ -20,12 +20,12 @@ spec:
       memory: "512Mi"
       cpu: 500m
     limits:
-      memory: "1Gi"
+      memory: "2Gi"
       cpu: "1"
 
   # Primary storage configuration
   storage:
-    size: 2Gi
+    size: 8Gi
     storageClass: longhorn # adjust according to your cluster
 
   # Database configuration
