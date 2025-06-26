@@ -1,4 +1,5 @@
 grafana:
+  crds.upgradeJob.enabled: true
   grafana.ini:
     server:
       root_url: https://grafana.hwkn.dev

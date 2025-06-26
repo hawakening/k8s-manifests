@@ -32,7 +32,7 @@ spec:
                 secretKeyRef:
                   name: cloudflared-token
                   key: tunnelToken
-          image: cloudflare/cloudflared:latest
+          image: cloudflare/cloudflared:2025.6.1
           name: cloudflared
           livenessProbe:
             httpGet:
