@@ -12,7 +12,7 @@ data:
   MAIL_HOST: "smtp.sendgrid.net"
   MAIL_PORT: "465"
   MAIL_USER: "apikey"
-  LOG_LEVEL: "info"
+  LOG_LEVEL: "http"
   # MONGOOSE_DEBUG: "true"
   SLOW_REQUEST_DEBUG_THRESHOLD: "500"
   # DISABLE_REGISTRATION: "true"
