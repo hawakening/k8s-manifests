@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Script to pull the database from the Kubernetes cluster for local development/debugging purposes
 

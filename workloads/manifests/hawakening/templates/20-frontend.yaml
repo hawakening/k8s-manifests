@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: hawakening-frontend
-          image: ghcr.io/hawakening/hawakening-services-frontend:v0.27.0
+          image: ghcr.io/hawakening/hawakening-services-frontend:v0.28.0
           ports:
             - containerPort: 80
           resources:

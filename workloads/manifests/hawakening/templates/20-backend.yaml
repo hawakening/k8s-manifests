@@ -29,7 +29,7 @@ spec:
               app: hawakening-backend
       containers:
         - name: hawakening-backend
-          image: ghcr.io/hawakening/hawakening-services-backend:v0.58.0
+          image: ghcr.io/hawakening/hawakening-services-backend:v0.59.0
           ports:
             - containerPort: 4000
           resources:
