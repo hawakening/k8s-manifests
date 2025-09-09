@@ -5,7 +5,7 @@ metadata:
   name: hawakening-backend-lb
   namespace: hawakening
   labels:
-    app: hawakening-backend
+    app: hawakening-backend-lb
 spec:
   selector:
     app: hawakening-backend

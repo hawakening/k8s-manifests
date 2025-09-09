@@ -5,7 +5,7 @@ metadata:
   name: hawakening-frontend
   namespace: hawakening
   labels:
-    app: hawakening-frontend
+    app: hawakening-frontend-lb
 spec:
   selector:
     app: hawakening-frontend

@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  namespace: hawakening
+  name: hawakening-backend
+  labels:
+    release: kube-prometheus-stack #This label allows Prometheus to find service monitors in the cluster and register them.
+spec:
+  selector:
+    matchLabels:
+      app: hawakening-backend
+  endpoints:
+    - targetPort: 4000
+      interval: 10s
+      relabelings:
+        # Keep only one pod by using pod labels or conditions
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          regex: (.+)
+          action: keep
+          replacement: $1 # Keep only the first pod
