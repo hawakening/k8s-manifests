@@ -7,7 +7,7 @@ data:
   REDIS_SENTINEL_HOST: redis.hawakening.svc.cluster.local
   REDIS_SENTINEL_PORT: "26379"
   REDIS_MASTER_NAME: "mymaster"
-  METEOR_URI: "http://services.hawakening.com"
+  METEOR_URI: "https://services.hawakening.com"
   SITE_URL: "https://hawakening.com"
   MAIL_HOST: "smtp.sendgrid.net"
   MAIL_PORT: "465"
