@@ -1,0 +1,39 @@
+image:
+  repository: ghcr.io/hawakening/hawakening-xmpp
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ghcr-secret
+
+adminSecret:
+  name: xmpp-admin
+  passwordKey: password
+
+auth:
+  userLookupUrl: http://hawakening-backend.hawakening.svc.cluster.local:30002/player
+
+service:
+  annotations: {}
+  externalTrafficPolicy: Cluster
+  loadBalancerIP: ""
+
+persistence:
+  storageClassName: longhorn
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+networkPolicy:
+  enabled: true
+  apiAllowedPods:
+    - app: hawakening-backend
+    - app: hawken-party-bridge
