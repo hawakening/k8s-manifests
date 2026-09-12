@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hawakening-xmpp-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: hawakening-xmpp
+data:
+  ejabberd.yml: |
+{{ .Files.Get "files/ejabberd.yml" | indent 4 }}
+  jwt-public.jwk: |
+{{ .Files.Get "files/jwt-public.jwk" | indent 4 }}
