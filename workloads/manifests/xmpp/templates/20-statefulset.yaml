@@ -61,13 +61,16 @@ spec:
             capabilities:
               drop:
                 - ALL
+              # The upstream image sets cap_net_bind_service=ep on beam.smp.
+              add:
+                - NET_BIND_SERVICE
           startupProbe:
             exec:
               command:
                 - ejabberdctl
                 - status
             periodSeconds: 5
-            timeoutSeconds: 5
+            timeoutSeconds: 10
             failureThreshold: 24
           readinessProbe:
             exec:
@@ -75,7 +78,7 @@ spec:
                 - ejabberdctl
                 - status
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 10
             failureThreshold: 3
           livenessProbe:
             exec:
