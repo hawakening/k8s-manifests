@@ -1,0 +1,29 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: hawakening-xmpp
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: hawakening-xmpp
+spec:
+  podSelector:
+    matchLabels:
+      app: hawakening-xmpp
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - port: xmpp-client
+          protocol: TCP
+    - from:
+{{- range .Values.networkPolicy.apiAllowedPods }}
+        - podSelector:
+            matchLabels:
+{{ toYaml . | indent 14 }}
+{{- end }}
+      ports:
+        - port: http-api
+          protocol: TCP
+{{- end }}
+

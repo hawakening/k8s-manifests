@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hawakening-xmpp-headless
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: hawakening-xmpp
+spec:
+  clusterIP: None
+  selector:
+    app: hawakening-xmpp
+  ports:
+    - name: xmpp-client
+      port: 5222
+      targetPort: xmpp-client
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hawakening-xmpp
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: hawakening-xmpp
+{{- with .Values.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+{{- with .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+{{- end }}
+  selector:
+    app: hawakening-xmpp
+  ports:
+    - name: xmpp-client
+      port: 5222
+      targetPort: xmpp-client
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hawakening-xmpp-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: hawakening-xmpp
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  selector:
+    app: hawakening-xmpp
+  ports:
+    - name: http-api
+      port: 5280
+      targetPort: http-api
+      protocol: TCP
+

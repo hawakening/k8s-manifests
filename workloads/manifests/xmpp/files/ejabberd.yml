@@ -1,0 +1,64 @@
+hosts:
+  - xmpp.hawakening.com
+
+acl:
+  admin:
+    user:
+      - "admin@xmpp.hawakening.com"
+
+access_rules:
+  jwt_only:
+    deny: admin
+    allow: all
+
+api_permissions:
+  "admin access":
+    from:
+      - mod_http_api
+    who:
+      access:
+        allow:
+          acl: admin
+    what:
+      - "*"
+
+modules:
+  mod_muc:
+    host: "party.@HOST@"
+    access:
+      - allow
+    access_create:
+      - allow
+    access_admin:
+      - allow
+  mod_offline: {}
+  mod_roster: {}
+  mod_private: {}
+  mod_caps: {}
+  mod_disco: {}
+  mod_last: {}
+  mod_version: {}
+  mod_ping: {}
+  mod_http_api: {}
+  mod_hawken_muc_config: {}
+
+loglevel: info
+
+listen:
+  - port: 5222
+    ip: "0.0.0.0"
+    module: ejabberd_c2s
+    starttls: false
+    starttls_required: false
+  - port: 5280
+    ip: "0.0.0.0"
+    module: ejabberd_http
+    request_handlers:
+      /api: mod_http_api
+
+auth_method:
+  - jwt
+  - hawken
+  - internal
+jwt_key: /opt/ejabberd/auth/jwt-public.jwk
+jwt_auth_only_rule: jwt_only
