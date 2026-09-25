@@ -11,7 +11,8 @@ webhook:
   failurePolicy: Ignore
 
 netbirdAPI:
-  # NetBird personal access token (service user, admin role), see cluster-addons/manifests/netbird/README.md.
+  # NetBird personal access token (service user, admin role). The SealedSecret is deployed by the
+  # `netbird` Application: cluster-addons/manifests/netbird/templates/05-netbird-mgmt-api-key.sealed.yaml
   keyFromSecret:
     name: netbird-mgmt-api-key
     key: NB_API_KEY

@@ -18,12 +18,12 @@ The operator creates networks, resources, DNS records, setup keys and the groups
 (NetBird is deny-by-default), so these steps are manual:
 
 1. **API token**: `Team > Service Users > Add service user` (role *Admin*), then create an access token.
-   Store it as a SealedSecret next to the operator Application:
+   Store it as a SealedSecret in the `netbird` Application (it creates the `netbird` namespace; the operator pod waits for the secret):
 
    ```sh
    kubectl -n netbird create secret generic netbird-mgmt-api-key \
      --from-literal=NB_API_KEY='<token>' --dry-run=client -o yaml \
-     | kubeseal --format yaml > cluster-addons/apps/templates/netbird-operator/netbird-mgmt-api-key.sealed.yaml
+     | kubeseal --format yaml > cluster-addons/manifests/netbird/templates/05-netbird-mgmt-api-key.sealed.yaml
    ```
 
 2. **User groups**: `Team > Groups`. Create and assign to users (groups are propagated to their peers):
