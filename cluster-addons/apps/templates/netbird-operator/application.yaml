@@ -9,7 +9,10 @@ spec:
     # OCI Helm chart, ArgoCD detects OCI registries from the missing URL scheme.
     chart: netbird-operator
     repoURL: ghcr.io/netbirdio/helm-charts
-    targetRevision: 0.8.0
+    # Pinned to 0.7.0: 0.8.0 ships the NetworkEgress CRD, which uses the CEL isIP() function
+    # (Kubernetes >= 1.31). The CRD is rejected on our k3s v1.30 cluster and the operator then
+    # crashes on startup. Bump once the cluster runs Kubernetes >= 1.31.
+    targetRevision: 0.7.0
     helm:
       releaseName: netbird-operator
       values: |
