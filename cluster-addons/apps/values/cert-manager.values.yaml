@@ -1,0 +1,4 @@
+crds:
+  enabled: true
+  # Keep CRDs (and therefore all Certificates/Issuers) if the chart is ever uninstalled.
+  keep: true

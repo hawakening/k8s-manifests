@@ -1,0 +1,30 @@
+# Maps NetBird groups to Kubernetes RBAC. The subject `Group` names must match the NetBird
+# group names exactly; membership is managed in the NetBird dashboard (Team > Users > groups).
+---
+# Full cluster access.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: netbird-k8s-admins
+subjects:
+  - kind: Group
+    name: k8s-admins
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+# Read-only access (built-in `view` role, excludes Secrets).
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: netbird-k8s-readers
+subjects:
+  - kind: Group
+    name: k8s-readers
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: view
+  apiGroup: rbac.authorization.k8s.io

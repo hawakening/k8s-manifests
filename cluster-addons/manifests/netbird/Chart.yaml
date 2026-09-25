@@ -1,0 +1,4 @@
+apiVersion: v2
+description: NetBird access to the cluster (Kubernetes API proxy and internal services)
+name: netbird
+version: 0.1.0

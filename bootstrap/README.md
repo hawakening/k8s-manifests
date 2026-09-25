@@ -32,6 +32,7 @@ kubeseal --format yaml --secret-file secret.yaml --sealed-secret-file sealedsecr
 > Important secrets before continuing:
 > - private-repo-creds (github)
 > - ghrc-creds (github)
+> - netbird-mgmt-api-key (netbird, see cluster-addons/manifests/netbird/README.md)
 
 ## 4. Bootstrap Cluster Addon apps
 ```

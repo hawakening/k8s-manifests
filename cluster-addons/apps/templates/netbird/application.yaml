@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: netbird
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # NetBird custom resources, applied after the netbird-operator (and its CRDs) exist.
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  destination:
+    namespace: netbird
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: cluster-addons/manifests/netbird
+    repoURL: https://github.com/hawakening/k8s-manifests
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 10
+      backoff:
+        duration: 15s
+        factor: 2
+        maxDuration: 5m
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - SkipDryRunOnMissingResource=true
