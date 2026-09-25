@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: netbird-operator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # OCI Helm chart, ArgoCD detects OCI registries from the missing URL scheme.
+    chart: netbird-operator
+    repoURL: ghcr.io/netbirdio/helm-charts
+    targetRevision: 0.8.0
+    helm:
+      releaseName: netbird-operator
+      values: |
+        {{ .Files.Get "values/netbird-operator.values.yaml" | nindent 8 }}
+  destination:
+    server: "{{ .Values.spec.destination.server }}"
+    namespace: netbird
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 10
+      backoff:
+        duration: 15s
+        factor: 2
+        maxDuration: 5m
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      # The chart contains cert-manager Certificate/Issuer resources; do not fail the
+      # dry run while cert-manager's CRDs are still being installed.
+      - SkipDryRunOnMissingResource=true

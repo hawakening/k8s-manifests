@@ -1,0 +1,24 @@
+cluster:
+  # Used to name the network and resources this cluster creates in NetBird.
+  name: hwkn-prod
+  dns: svc.cluster.local
+
+webhook:
+  # Webhook serving certificate is issued by cert-manager (see the cert-manager addon).
+  enableCertManager: true
+  # The mutating webhook intercepts every pod creation in the cluster (sidecar injection, which we
+  # do not use). Do not block pod scheduling cluster-wide when the operator is unavailable.
+  failurePolicy: Ignore
+
+netbirdAPI:
+  # NetBird personal access token (service user, admin role), see cluster-addons/manifests/netbird/README.md.
+  keyFromSecret:
+    name: netbird-mgmt-api-key
+    key: NB_API_KEY
+
+# Legacy annotation-based ingress, replaced by NetworkRouter/NetworkResource CRs.
+ingress:
+  enabled: false
+
+gatewayAPI:
+  enabled: false

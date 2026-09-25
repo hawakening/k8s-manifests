@@ -1,0 +1,53 @@
+# Kubernetes API access over NetBird.
+# The operator runs netbird-kubeapi-proxy pods that join the NetBird network as peers named
+# hwkn-prod.netbird-kubeapi-proxy.<netbird domain>. Requests are impersonated with the NetBird
+# user id and the NetBird group names of the calling peer, which are matched by the RBAC
+# bindings in 21-cluster-rbac.yaml.
+#
+# Client side:
+#   netbird kubernetes list
+#   netbird kubernetes write-kubeconfig hwkn-prod
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: clusterproxy-hwkn-prod
+  namespace: netbird
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: netbird-clusterproxy-impersonator
+rules:
+  - apiGroups: [""]
+    resources: [users, groups]
+    verbs: [impersonate]
+  - apiGroups: [authentication.k8s.io]
+    resources: ["userextras/*", uids]
+    verbs: [impersonate]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: netbird-clusterproxy-impersonator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: netbird-clusterproxy-impersonator
+subjects:
+  - kind: ServiceAccount
+    name: clusterproxy-hwkn-prod
+    namespace: netbird
+---
+apiVersion: netbird.io/v1alpha1
+kind: ClusterProxy
+metadata:
+  name: hwkn-prod
+  namespace: netbird
+spec:
+  clusterName: hwkn-prod
+  apiServer: https://kubernetes.default.svc.cluster.local/
+  serviceAccountName: clusterproxy-hwkn-prod
+  groups:
+    - localRef:
+        name: k8s-api-proxy

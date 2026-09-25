@@ -1,0 +1,21 @@
+# NetBird groups managed by the operator.
+# Other Group CRs may reference these by `localRef` (same namespace) or by `name` (any namespace).
+---
+# Peers of the Kubernetes API proxy. Destination group for the "k8s-admins -> kube API" policy.
+apiVersion: netbird.io/v1alpha1
+kind: Group
+metadata:
+  name: k8s-api-proxy
+  namespace: netbird
+spec:
+  name: k8s-api-proxy
+---
+# Network resources (ClusterIP services) exposed to employees. Destination group for the
+# "hwkn-team -> k8s-services" policy.
+apiVersion: netbird.io/v1alpha1
+kind: Group
+metadata:
+  name: k8s-services
+  namespace: netbird
+spec:
+  name: k8s-services

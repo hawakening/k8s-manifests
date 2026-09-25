@@ -1,0 +1,50 @@
+# Internal services exposed to the NetBird network.
+# A NetworkResource must live in the same namespace as the Service it references and the
+# Service must be of type ClusterIP. The operator creates the A record
+# <service>.<namespace>.hwkn.internal; add a CNAME for the friendly name in the NetBird
+# dashboard (DNS > Zones > hwkn.internal), see README.md.
+---
+# argocd.hwkn.internal -> argocd-server.argocd.hwkn.internal
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  networkRouterRef:
+    name: hwkn-prod
+    namespace: netbird
+  serviceRef:
+    name: argocd-server
+  groups:
+    - name: k8s-services
+---
+# grafana.hwkn.internal -> kube-prometheus-stack-grafana.monitoring.hwkn.internal
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  networkRouterRef:
+    name: hwkn-prod
+    namespace: netbird
+  serviceRef:
+    name: kube-prometheus-stack-grafana
+  groups:
+    - name: k8s-services
+---
+# longhorn.hwkn.internal -> longhorn-frontend.longhorn-system.hwkn.internal
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: longhorn-frontend
+  namespace: longhorn-system
+spec:
+  networkRouterRef:
+    name: hwkn-prod
+    namespace: netbird
+  serviceRef:
+    name: longhorn-frontend
+  groups:
+    - name: k8s-services
