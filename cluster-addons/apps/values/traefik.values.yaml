@@ -17,6 +17,12 @@ providers:
   kubernetesIngress:
     # Only handle Ingresses with ingressClassName "internal".
     ingressClass: internal
+    # A ClusterIP service has no load balancer address to copy into the Ingress status, which
+    # leaves ArgoCD waiting for the Ingresses to become healthy. Publish the NetBird name instead.
+    publishedService:
+      enabled: false
+    ingressEndpoint:
+      hostname: traefik.traefik.int.hwkn.dev
 
 ports:
   web:
