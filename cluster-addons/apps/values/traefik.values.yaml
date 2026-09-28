@@ -32,6 +32,12 @@ ports:
           to: websecure
           scheme: https
           permanent: true
+  websecure:
+    http:
+      # Compress responses (zstd/br/gzip). Grafana and ArgoCD serve large uncompressed JS bundles,
+      # which is very noticeable at the ~140ms round trip to the cluster.
+      middlewares:
+        - traefik-compress@kubernetescrd
 
 # Wildcard *.int.hwkn.dev certificate issued by cert-manager (cluster-addons/manifests/ingress).
 # Ingresses don't need a tls block; every host on websecure is served with this certificate.
@@ -43,3 +49,12 @@ tlsStore:
 service:
   spec:
     type: ClusterIP
+
+extraObjects:
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: compress
+      namespace: traefik
+    spec:
+      compress: {}
