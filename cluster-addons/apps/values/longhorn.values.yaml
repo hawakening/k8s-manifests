@@ -1,0 +1,6 @@
+ingress:
+  enabled: true
+  ingressClassName: internal
+  host: longhorn.int.hwkn.dev
+  path: /
+  pathType: Prefix

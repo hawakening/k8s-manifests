@@ -5,8 +5,10 @@ NetBird replaces the Tailscale operator for private access to the cluster:
 - **Kubernetes API**: the `ClusterProxy` runs `netbird-kubeapi-proxy` peers. `kubectl` traffic is
   authenticated by NetBird identity and impersonated into Kubernetes RBAC (no tokens to hand out).
 - **Internal services** (ArgoCD, Grafana, Longhorn, ...): the `NetworkRouter` runs routing peers and
-  every `NetworkResource` publishes a ClusterIP service as `<service>.<namespace>.hwkn.internal`.
-  Friendly names such as `argocd.hwkn.internal` are CNAMEs added by hand.
+  a single `NetworkResource` publishes the internal Traefik ingress (TCP 80/443) as
+  `traefik.traefik.int.hwkn.dev`. A wildcard CNAME `*.int.hwkn.dev` points at it, so every
+  `Ingress` with `ingressClassName: internal` is reachable over HTTPS with a Let's Encrypt
+  certificate (see [cluster-addons/manifests/ingress](../ingress/README.md)).
 
 The operator itself is installed by the `netbird-operator` Application
 (`cluster-addons/apps/templates/netbird-operator`) and needs cert-manager for its webhook certificate.
@@ -34,19 +36,20 @@ The operator creates networks, resources, DNS records, setup keys and the groups
    The names must match `templates/21-cluster-rbac.yaml` exactly.
 
 3. **DNS zone**: `DNS > Zones > Add Zone`
-   - Domain: `hwkn.internal` (must match `spec.dnsZoneRef.name` in `templates/30-network-router.yaml`)
+   - Domain: `int.hwkn.dev` (must match `spec.dnsZoneRef.name` in `templates/30-network-router.yaml`)
    - Distribution groups: `hwkn-team`
-   - The operator adds one A record per `NetworkResource`, always named `<service>.<namespace>.hwkn.internal`.
-   - Once those exist, add the friendly names as CNAME records (`Add Record`, type CNAME):
+   - The operator adds one A record per `NetworkResource`, always named `<service>.<namespace>.int.hwkn.dev`.
+   - Once `traefik.traefik.int.hwkn.dev` exists, add a wildcard CNAME record (`Add Record`, type CNAME):
 
-     | Name                     | Target                                                   |
-     |--------------------------|----------------------------------------------------------|
-     | `argocd.hwkn.internal`   | `argocd-server.argocd.hwkn.internal`                     |
-     | `grafana.hwkn.internal`  | `kube-prometheus-stack-grafana.monitoring.hwkn.internal` |
-     | `longhorn.hwkn.internal` | `longhorn-frontend.longhorn-system.hwkn.internal`        |
+     | Name             | Target                         |
+     |------------------|--------------------------------|
+     | `*.int.hwkn.dev` | `traefik.traefik.int.hwkn.dev` |
 
-     The CNAMEs keep working when a service's ClusterIP changes, because the operator updates the
-     A record they point to.
+     The CNAME keeps working when the Traefik ClusterIP changes, because the operator updates the
+     A record it points to.
+   - The zone is authoritative for NetBird peers: `int.hwkn.dev` names are only resolved from here,
+     the public `hwkn.dev` zone is not affected. Only the ACME challenge records
+     (`_acme-challenge.int.hwkn.dev`) are created in Cloudflare.
 
 4. **Access policies**: `Access Control > Policies`. The destination groups `k8s-api-proxy` and
    `k8s-services` are created by the operator once it runs.
@@ -54,9 +57,7 @@ The operator creates networks, resources, DNS records, setup keys and the groups
    | Name           | Source                     | Destination     | Protocol / ports |
    |----------------|----------------------------|-----------------|------------------|
    | k8s-api        | `k8s-admins`, `k8s-readers` | `k8s-api-proxy` | TCP 443          |
-   | k8s-services   | `hwkn-team`           | `k8s-services`  | TCP 80           |
-
-   Add ports to the `k8s-services` policy when exposing a service on another port.
+   | k8s-services   | `hwkn-team`                | `k8s-services`  | TCP 80, 443      |
 
 ## Client usage
 
@@ -68,33 +69,20 @@ netbird kubernetes write-kubeconfig hwkn-prod   # adds context "hwkn-prod" to ~/
 kubectl --context hwkn-prod get nodes
 ```
 
-Internal services resolve on connected peers, e.g. `http://argocd.hwkn.internal`.
+Internal services resolve on connected peers, e.g. `https://argocd.int.hwkn.dev`.
 
 ## Exposing another service
 
-1. Add a `NetworkResource` to `templates/40-network-resources.yaml`, in the namespace of the
-   (ClusterIP) service and referencing the router:
+Add an `Ingress` with `ingressClassName: internal` and a host under `int.hwkn.dev`; no NetBird,
+DNS or certificate changes are needed. See [cluster-addons/manifests/ingress](../ingress/README.md).
 
-   ```yaml
-   apiVersion: netbird.io/v1alpha1
-   kind: NetworkResource
-   metadata:
-     name: metabase
-     namespace: metabase
-   spec:
-     networkRouterRef:
-       name: hwkn-prod
-       namespace: netbird
-     serviceRef:
-       name: metabase
-     groups:
-       - name: k8s-services
-   ```
+## Migrating from `hwkn.internal`
 
-2. After ArgoCD syncs, add a CNAME in the `hwkn.internal` zone:
-   `metabase.hwkn.internal -> metabase.metabase.hwkn.internal`.
-3. If the service listens on a port other than 80 (Metabase uses 3000), add that port to the
-   `k8s-services` access policy.
+Services used to be published one `NetworkResource` each in the `hwkn.internal` zone. Moving the
+router to `int.hwkn.dev` makes the operator delete its records in the old zone. Afterwards:
+
+1. Delete the `hwkn.internal` zone (and its hand-made CNAMEs) in the NetBird dashboard.
+2. Add TCP 443 to the `k8s-services` policy.
 
 ## Removing the Tailscale operator
 
@@ -105,6 +93,7 @@ app-of-apps leaves its resources behind. Clean up once:
 kubectl delete application -n argocd tailscale-operator --ignore-not-found
 kubectl delete namespace tailscale
 kubectl get crd -o name | grep tailscale.com | xargs -r kubectl delete
+kubectl delete ingressclass tailscale
 ```
 
 Afterwards revoke the OAuth client and remove the `hwkn-prod-tailscale-operator` device in the

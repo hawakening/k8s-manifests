@@ -1,0 +1,39 @@
+# Internal ingress controller, only reachable over NetBird.
+# The Service is ClusterIP (not LoadBalancer) so servicelb does not bind 80/443 on the nodes;
+# NetBird routes to it through the NetworkResource in cluster-addons/manifests/netbird.
+deployment:
+  replicas: 2
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+
+ingressClass:
+  enabled: true
+  isDefaultClass: false
+  name: internal
+
+providers:
+  kubernetesIngress:
+    # Only handle Ingresses with ingressClassName "internal".
+    ingressClass: internal
+
+ports:
+  web:
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+
+# Wildcard *.int.hwkn.dev certificate issued by cert-manager (cluster-addons/manifests/ingress).
+# Ingresses don't need a tls block; every host on websecure is served with this certificate.
+tlsStore:
+  default:
+    defaultCertificate:
+      secretName: wildcard-int-hwkn-dev-tls
+
+service:
+  spec:
+    type: ClusterIP

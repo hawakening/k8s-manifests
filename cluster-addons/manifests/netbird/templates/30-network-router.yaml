@@ -1,8 +1,7 @@
 # Routing peers that forward NetBird traffic to ClusterIP services.
 # Creates the network "hwkn-prod" in NetBird and a DNS record per NetworkResource in the
-# referenced zone: <service>.<namespace>.hwkn.internal
-# Friendly names (argocd.hwkn.internal, ...) are CNAMEs added by hand in the dashboard, see README.md.
-# The DNS zone must be created in the NetBird dashboard first (DNS > Zones).
+# referenced zone: <service>.<namespace>.int.hwkn.dev
+# The DNS zone must be created in the NetBird dashboard first (DNS > Zones), see README.md.
 ---
 apiVersion: netbird.io/v1alpha1
 kind: NetworkRouter
@@ -11,7 +10,7 @@ metadata:
   namespace: netbird
 spec:
   dnsZoneRef:
-    name: hwkn.internal
+    name: int.hwkn.dev
   logLevel: info
   workloadOverride:
     # Routing peers are spread across nodes; 2 is enough for a small cluster (operator default is 3).

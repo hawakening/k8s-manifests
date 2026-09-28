@@ -1,0 +1,4 @@
+apiVersion: v2
+description: Internal ingress over NetBird (Let's Encrypt wildcard certificate for *.int.hwkn.dev and Ingresses)
+name: ingress
+version: 0.1.0

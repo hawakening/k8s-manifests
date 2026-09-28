@@ -2,7 +2,7 @@ configs:
   params:
     server.insecure: true
 
-# TODO: Waiting until we know what ingress controller we'll be using
+# The Ingress (argocd.int.hwkn.dev) is managed in cluster-addons/manifests/ingress.
 server:
   ingress:
     enabled: false

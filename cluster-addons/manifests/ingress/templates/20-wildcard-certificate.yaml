@@ -1,0 +1,14 @@
+# Default certificate of Traefik (tlsStore in cluster-addons/apps/values/traefik.values.yaml).
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-int-hwkn-dev
+  namespace: traefik
+spec:
+  secretName: wildcard-int-hwkn-dev-tls
+  dnsNames:
+    - "*.int.hwkn.dev"
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-cloudflare

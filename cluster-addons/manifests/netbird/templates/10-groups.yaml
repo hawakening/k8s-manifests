@@ -10,7 +10,7 @@ metadata:
 spec:
   name: k8s-api-proxy
 ---
-# Network resources (ClusterIP services) exposed to employees. Destination group for the
+# Network resources (the internal Traefik ingress) exposed to employees. Destination group for the
 # "hwkn-team -> k8s-services" policy.
 apiVersion: netbird.io/v1alpha1
 kind: Group
