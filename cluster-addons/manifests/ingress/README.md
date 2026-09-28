@@ -15,6 +15,7 @@ DNS zone and access policy).
 | https://argocd.int.hwkn.dev     | `argocd/argocd-server`                     |
 | https://grafana.int.hwkn.dev    | `monitoring/kube-prometheus-stack-grafana` |
 | https://longhorn.int.hwkn.dev   | `longhorn-system/longhorn-frontend`        |
+| https://metabase.int.hwkn.dev   | `metabase/metabase`                        |
 
 ## One-time setup: Cloudflare API token
 
