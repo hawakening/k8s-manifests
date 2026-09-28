@@ -2,9 +2,12 @@ grafana:
   crds.upgradeJob.enabled: true
   grafana.ini:
     server:
-      root_url: https://grafana.hwkn.dev
+      root_url: https://grafana.int.hwkn.dev
   ingress:
-    enabled: false
+    enabled: true
+    ingressClassName: internal
+    hosts:
+      - grafana.int.hwkn.dev
   persistence:
     enabled: true
     type: sts

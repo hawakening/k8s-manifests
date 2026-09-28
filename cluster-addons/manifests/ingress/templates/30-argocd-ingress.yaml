@@ -1,0 +1,21 @@
+# ArgoCD is installed by hand (bootstrap/), so its Ingress lives here instead of in Helm values.
+# argocd-server runs with server.insecure, Traefik terminates TLS.
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  ingressClassName: internal
+  rules:
+    - host: argocd.int.hwkn.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  name: http

@@ -3,7 +3,7 @@
 This repository contains all deployment manifests for the hawakening.com & hwkn.dev infrastructure.
 The manifests in this repo are automatically synced to the cluster using ArgoCD.
 
-Our ArgoCD dashboard is reachable over NetBird at http://argocd.hwkn.internal (see [cluster-addons/manifests/netbird](./cluster-addons/manifests/netbird/README.md))
+Our ArgoCD dashboard is reachable over NetBird at https://argocd.int.hwkn.dev (see [cluster-addons/manifests/netbird](./cluster-addons/manifests/netbird/README.md) and [cluster-addons/manifests/ingress](./cluster-addons/manifests/ingress/README.md))
 
 > We do not manage anything through the ArgoCD UI!
 

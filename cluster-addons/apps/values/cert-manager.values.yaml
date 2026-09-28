@@ -2,3 +2,7 @@ crds:
   enabled: true
   # Keep CRDs (and therefore all Certificates/Issuers) if the chart is ever uninstalled.
   keep: true
+
+# Check DNS-01 challenge records against public resolvers only, not the cluster DNS.
+dns01RecursiveNameservers: "1.1.1.1:53,8.8.8.8:53"
+dns01RecursiveNameserversOnly: true
