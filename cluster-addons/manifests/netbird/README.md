@@ -4,7 +4,7 @@ NetBird replaces the Tailscale operator for private access to the cluster:
 
 - **Kubernetes API**: the `ClusterProxy` runs `netbird-kubeapi-proxy` peers. `kubectl` traffic is
   authenticated by NetBird identity and impersonated into Kubernetes RBAC (no tokens to hand out).
-- **Internal services** (ArgoCD, Grafana, Longhorn, ...): the `NetworkRouter` runs routing peers and
+- **Internal services** (ArgoCD, Grafana, Longhorn, Metabase, ...): the `NetworkRouter` runs routing peers and
   every `NetworkResource` publishes a ClusterIP service as `<service>.<namespace>.hwkn.internal`.
   Friendly names such as `argocd.hwkn.internal` are CNAMEs added by hand.
 
@@ -44,6 +44,7 @@ The operator creates networks, resources, DNS records, setup keys and the groups
      | `argocd.hwkn.internal`   | `argocd-server.argocd.hwkn.internal`                     |
      | `grafana.hwkn.internal`  | `kube-prometheus-stack-grafana.monitoring.hwkn.internal` |
      | `longhorn.hwkn.internal` | `longhorn-frontend.longhorn-system.hwkn.internal`        |
+     | `metabase.hwkn.internal` | `metabase.metabase.hwkn.internal`                        |
 
      The CNAMEs keep working when a service's ClusterIP changes, because the operator updates the
      A record they point to.
@@ -54,9 +55,10 @@ The operator creates networks, resources, DNS records, setup keys and the groups
    | Name           | Source                     | Destination     | Protocol / ports |
    |----------------|----------------------------|-----------------|------------------|
    | k8s-api        | `k8s-admins`, `k8s-readers` | `k8s-api-proxy` | TCP 443          |
-   | k8s-services   | `hwkn-team`           | `k8s-services`  | TCP 80           |
+   | k8s-services   | `hwkn-team`           | `k8s-services`  | TCP 80, 3000     |
 
-   Add ports to the `k8s-services` policy when exposing a service on another port.
+   Port 3000 is for Metabase (`http://metabase.hwkn.internal:3000`). Add ports to the
+   `k8s-services` policy when exposing a service on another port.
 
 ## Client usage
 
@@ -79,22 +81,21 @@ Internal services resolve on connected peers, e.g. `http://argocd.hwkn.internal`
    apiVersion: netbird.io/v1alpha1
    kind: NetworkResource
    metadata:
-     name: metabase
-     namespace: metabase
+     name: my-service
+     namespace: my-namespace
    spec:
      networkRouterRef:
        name: hwkn-prod
        namespace: netbird
      serviceRef:
-       name: metabase
+       name: my-service
      groups:
        - name: k8s-services
    ```
 
 2. After ArgoCD syncs, add a CNAME in the `hwkn.internal` zone:
-   `metabase.hwkn.internal -> metabase.metabase.hwkn.internal`.
-3. If the service listens on a port other than 80 (Metabase uses 3000), add that port to the
-   `k8s-services` access policy.
+   `my-service.hwkn.internal -> my-service.my-namespace.hwkn.internal`.
+3. If the service listens on a port other than 80, add that port to the `k8s-services` access policy.
 
 ## Removing the Tailscale operator
 

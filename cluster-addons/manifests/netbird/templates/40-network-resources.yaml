@@ -48,3 +48,18 @@ spec:
     name: longhorn-frontend
   groups:
     - name: k8s-services
+---
+# metabase.hwkn.internal -> metabase.metabase.hwkn.internal (port 3000)
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: metabase
+  namespace: metabase
+spec:
+  networkRouterRef:
+    name: hwkn-prod
+    namespace: netbird
+  serviceRef:
+    name: metabase
+  groups:
+    - name: k8s-services
