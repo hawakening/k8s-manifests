@@ -38,7 +38,11 @@ modules:
   mod_disco: {}
   mod_last: {}
   mod_version: {}
-  mod_ping: {}
+  mod_ping: 
+    send_pings: true
+    ping_interval: 30
+    ping_ack_timeout: 60
+    timeout_action: kill
   mod_http_api: {}
   mod_hawken_muc_config: {}
 
