@@ -10,6 +10,24 @@ access_rules:
   jwt_only:
     deny: admin
     allow: all
+  muc_admin:
+    allow: admin
+  c2s_players:
+    deny: admin
+    allow: all
+
+shaper:
+  player:
+    rate: 16384
+    burst_size: 65536
+
+shaper_rules:
+  player:
+    player: all
+  max_user_sessions:
+    3: all
+  max_user_offline_messages:
+    100: all
 
 api_permissions:
   "admin access":
@@ -20,7 +38,19 @@ api_permissions:
         allow:
           acl: admin
     what:
-      - "*"
+      - add_rosteritem
+      - delete_rosteritem
+      - get_roster
+      - get_presence
+      - connected_users
+      - connected_users_vhost
+      - hawken_player_match_start
+      - hawken_player_deploy
+      - hawken_player_entered_match
+      - hawken_player_match_cancel
+      - hawken_player_deploy_cancel
+      - hawken_send_system_message
+      - hawken_broadcast_system_message
 
 modules:
   mod_muc:
@@ -29,16 +59,37 @@ modules:
       - allow
     access_create:
       - allow
-    access_admin:
-      - allow
+    access_admin: muc_admin
+    access_persistent: none
+    access_register: none
+    preload_rooms: false
+    max_user_conferences: 1
+    max_users: 6
+    history_size: 0
+    max_room_id: 128
+    max_room_name: 128
+    max_room_desc: 512
+    min_message_interval: 0.25
+    min_presence_interval: 0.5
+    default_room_options:
+      public: false
+      public_list: false
+      persistent: false
+      members_only: true
+      allow_user_invites: true
+      anonymous: false
+      allowpm: none
+      allow_query_users: false
+      allow_change_subj: false
+      allow_subscription: false
+      max_users: 6
   mod_offline: {}
   mod_roster: {}
-  mod_private: {}
   mod_caps: {}
   mod_disco: {}
   mod_last: {}
   mod_version: {}
-  mod_ping: 
+  mod_ping:
     send_pings: true
     ping_interval: 30
     ping_ack_timeout: 60
@@ -52,6 +103,13 @@ listen:
   - port: 5222
     ip: "0.0.0.0"
     module: ejabberd_c2s
+    access: c2s_players
+    shaper: player
+    max_stanza_size: 65536
+    max_stanza_elements: 256
+    pre_auth_max_stanza_size: 8192
+    pre_auth_max_stanza_elements: 32
+    max_fsm_queue: 1000
     starttls: false
     starttls_required: false
   - port: 5280
@@ -66,3 +124,5 @@ auth_method:
   - internal
 jwt_key: /opt/ejabberd/auth/jwt-public.jwk
 jwt_auth_only_rule: jwt_only
+auth_use_cache: false
+s2s_access: none

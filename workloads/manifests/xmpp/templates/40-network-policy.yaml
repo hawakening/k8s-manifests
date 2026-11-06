@@ -12,6 +12,7 @@ spec:
       app: hawakening-xmpp
   policyTypes:
     - Ingress
+    - Egress
   ingress:
     - ports:
         - port: xmpp-client
@@ -24,6 +25,27 @@ spec:
 {{- end }}
       ports:
         - port: http-api
+          protocol: TCP
+  egress:
+    # The service port 30002 is translated to backend pod port 4000.
+    - to:
+        - podSelector:
+            matchLabels:
+              app: hawakening-backend
+      ports:
+        - port: 4000
+          protocol: TCP
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
           protocol: TCP
 {{- end }}
 
